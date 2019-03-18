@@ -1,0 +1,41 @@
+#include <iostream>
+#include <pqxx/pqxx>
+
+#include "exerciser.h"
+
+// using namespace std;
+// using namespace pqxx;
+
+int main(int argc, char *argv[]) {
+
+  // Allocate & initialize a Postgres connection object
+  pqxx::connection *C;
+
+  try {
+    // Establish a connection to the database
+    // Parameters: database name, user name, user password
+    C = new pqxx::connection("dbname=ACC_BBALL user=postgres password=passw0rd "
+                             "hostaddr=0.0.0.0 port=5432");
+
+    if (C->is_open()) {
+      std::cout << "Opened database successfully: " << C->dbname() << std::endl;
+    } else {
+      std::cout << "Can't open database" << std::endl;
+      return EXIT_FAILURE;
+    }
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // TODO: create PLAYER, TEAM, STATE, and COLOR tables in the ACC_BBALL
+  // database
+  //      load each table with rows from the provided source txt files
+
+  exercise(C);
+
+  // Close database connection
+  C->disconnect();
+
+  return EXIT_SUCCESS;
+}
