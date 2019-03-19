@@ -7,4 +7,13 @@
 // using namespace std;
 // using namespace pqxx;
 
-void exercise(pqxx::connection *C) {}
+void exercise(pqxx::connection *C) {
+  query2(C, "Gold");
+  query2(C, "Maroon");
+  query3(C, "Duke");
+  query3(C, "UNC");
+  query4(C, "NC", "Gold");
+  query4(C, "NC", "LightBlue");
+  query4(C, "NC", "DarkBlue");
+  query4(C, "NC", "Red");
+}

@@ -6,8 +6,13 @@
 
 // using namespace std;
 // using namespace pqxx;
+static int DEBUG_PRINT = 0;
 
 int main(int argc, char *argv[]) {
+
+  if (argc == 2) {
+    DEBUG_PRINT = 1;
+  }
 
   // Allocate & initialize a Postgres connection object
   pqxx::connection *C;

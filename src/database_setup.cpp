@@ -130,7 +130,7 @@ void update_state(pqxx::connection *C, std::istream &state_istream) {
   std::vector<std::string> values;
 
   while (std::getline(state_istream, curr)) {
-    std::cout << curr << std::endl;
+    //    std::cout << curr << std::endl;
     values = read_line(curr);
     // todo: add error checking
     // todo: check no. of columns extracted
@@ -144,7 +144,7 @@ void update_color(pqxx::connection *C, std::istream &color_istream) {
   std::vector<std::string> values;
 
   while (std::getline(color_istream, curr)) {
-    std::cout << curr << std::endl;
+    //    std::cout << curr << std::endl;
     values = read_line(curr);
     // todo: add error checking
     // todo: check no. of columns extracted
@@ -157,7 +157,7 @@ void update_team(pqxx::connection *C, std::istream &team_istream) {
   std::vector<std::string> values;
 
   while (std::getline(team_istream, curr)) {
-    std::cout << curr << std::endl;
+    //    std::cout << curr << std::endl;
     values = read_line(curr);
     // todo: add error checking
     // todo: check no. of columns extracted
@@ -177,7 +177,7 @@ void update_player(pqxx::connection *C, std::istream &player_istream) {
   std::vector<std::string> values;
 
   while (std::getline(player_istream, curr)) {
-    std::cout << curr << std::endl;
+    //    std::cout << curr << std::endl;
     values = read_line(curr);
     // todo: add error checking
     // todo: check no. of columns extracted

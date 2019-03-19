@@ -1,4 +1,5 @@
 #include "query_funcs.h"
+#include <iomanip>
 
 // using namespace std;
 // using namespace pqxx;
@@ -83,13 +84,85 @@ void query1(pqxx::connection *C, int use_mpg, int min_mpg, int max_mpg,
             double max_bpg) {}
 
 void query2(pqxx::connection *C, std::string team_color) {
-  pqxx::work w(*C);
-  pqxx::result r;
+  std::cout << "NAME" << std::endl;
+
+  pqxx::nontransaction n(*C);
+  try {
+    pqxx::result r(n.exec("SELECT Team.name FROM Team, Color WHERE "
+                          "Team.color_id=Color.color_id AND color.name=" +
+                          n.quote(team_color) + ";"));
+
+    for (pqxx::result::const_iterator iter = r.begin(); iter != r.end();
+         iter++) {
+      std::cout << iter[0].as<std::string>() << std::endl;
+    }
+
+  } catch (std::exception &e) {
+    std::cerr << "query2: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Queried teams with color " + team_color << std::endl; // remove
 }
 
-void query3(pqxx::connection *C, std::string team_name) {}
+void query3(pqxx::connection *C, std::string team_name) {
+  std::cout << "FIRST_NAME\tLAST_NAME" << std::endl;
+
+  pqxx::nontransaction n(*C);
+  try {
+    pqxx::result r(
+        n.exec("SELECT Player.first_name, Player.last_name FROM Player, Team "
+               "WHERE Player.team_id = Team.team_id AND team.name = " +
+               n.quote(team_name) + ";"));
+
+    for (pqxx::result::const_iterator iter = r.begin(); iter != r.end();
+         iter++) {
+      std::cout << iter[0].as<std::string>() << "\t"
+                << iter[1].as<std::string>() << std::endl;
+    }
+
+  } catch (std::exception &e) {
+    std::cerr << "query3: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Queried players in team " + team_name +
+                   " based on descending order of ppg"
+            << std::endl; // remove
+}
 
 void query4(pqxx::connection *C, std::string team_state,
-            std::string team_color) {}
+            std::string team_color) {
+  std::cout << std::left << std::setw(15) << "FIRST_NAME" << std::left
+            << std::setw(15) << "LAST_NAME" << std::left << std::setw(15)
+            << "UNIFORM_NUM" << std::endl;
+
+  pqxx::nontransaction n(*C);
+  try {
+
+    pqxx::result r(n.exec("SELECT Player.first_name, Player.last_name, "
+                          "Player.uniform_num FROM Player, "
+                          "Color, Team, State "
+                          "WHERE Player.team_id=Team.team_id AND "
+                          "Team.state_id=State.state_id AND "
+                          "Team.color_id=Color.color_id "
+                          "AND State.name=" +
+                          n.quote(team_state) +
+                          " AND Color.name=" + n.quote(team_color) + ";"));
+
+    for (pqxx::result::const_iterator iter = r.begin(); iter != r.end();
+         iter++) {
+      std::cout << std::left << std::setw(15) << iter[0].as<std::string>()
+                << std::left << std::setw(15) << iter[1].as<std::string>()
+                << std::left << std::setw(15) << iter[2].as<std::string>()
+                << std::endl;
+    }
+
+  } catch (std::exception &e) {
+    std::cerr << "query4: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Queried players from state " + team_state + " and team color " +
+                   team_color
+            << std::endl; // remove
+}
 
 void query5(pqxx::connection *C, int num_wins) {}
