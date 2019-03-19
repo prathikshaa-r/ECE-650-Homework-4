@@ -127,6 +127,8 @@ void update_color(pqxx::connection *C, std::istream &color_istream) {
   while (std::getline(color_istream, curr)) {
     std::cout << curr << std::endl;
     values = read_line(curr);
+    // todo: add error checking
+    // todo: check no. of columns extracted
     add_color(C, values[0]);
   }
 }
