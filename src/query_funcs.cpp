@@ -5,10 +5,46 @@
 
 void add_player(pqxx::connection *C, int team_id, int jersey_num,
                 std::string first_name, std::string last_name, int mpg, int ppg,
-                int rpg, int apg, double spg, double bpg) {}
+                int rpg, int apg, double spg, double bpg) {
+  pqxx::work w(*C);
+  pqxx::result r;
+
+  try {
+    r = w.exec(
+        "INSERT INTO PLAYER (TEAM_ID, UNIFORM_NUM, FIRST_NAME, LAST_NAME, "
+        "MPG, PPG, RPG, APG, SPG, BPG) VALUES (" +
+        w.quote(team_id) + ", " + w.quote(jersey_num) + ", " +
+        w.quote(first_name) + ", " + w.quote(last_name) + ", " + w.quote(mpg) +
+        ", " + w.quote(ppg) + ", " + w.quote(rpg) + ", " + w.quote(apg) + ", " +
+        w.quote(spg) + ", " + w.quote(bpg) + ");");
+    w.commit();
+  } catch (std::exception &e) {
+    w.abort();
+    std::cerr << "add_player: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Added player  " + first_name + " " + last_name
+            << std::endl; // remove
+}
 
 void add_team(pqxx::connection *C, std::string name, int state_id, int color_id,
-              int wins, int losses) {}
+              int wins, int losses) {
+  pqxx::work w(*C);
+  pqxx::result r;
+
+  try {
+    r = w.exec(
+        "INSERT INTO TEAM (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES (" +
+        w.quote(name) + ", " + w.quote(state_id) + ", " + w.quote(color_id) +
+        ", " + w.quote(wins) + ", " + w.quote(losses) + ");");
+    w.commit();
+  } catch (std::exception &e) {
+    w.abort();
+    std::cerr << "add_team: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Added team  " + name << std::endl; // remove
+}
 
 void add_state(pqxx::connection *C, std::string name) {
   pqxx::work w(*C);
@@ -46,7 +82,10 @@ void query1(pqxx::connection *C, int use_mpg, int min_mpg, int max_mpg,
             double min_spg, double max_spg, int use_bpg, double min_bpg,
             double max_bpg) {}
 
-void query2(pqxx::connection *C, std::string team_color) {}
+void query2(pqxx::connection *C, std::string team_color) {
+  pqxx::work w(*C);
+  pqxx::result r;
+}
 
 void query3(pqxx::connection *C, std::string team_name) {}
 

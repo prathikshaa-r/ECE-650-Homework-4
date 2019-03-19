@@ -1,5 +1,6 @@
 #include "database_setup.h"
 #include <fstream>
+#include <string>
 
 pqxx::result execute_stmt(pqxx::connection *C, std::string sql,
                           std::string desc) {
@@ -103,6 +104,24 @@ void populate_tables_from_src_files(pqxx::connection *C) {
     // throw exception instead of exiting
     exit(EXIT_FAILURE);
   }
+
+  if (team_src.is_open() && (!(team_src.eof()))) {
+    update_team(C, team_src);
+    team_src.close();
+  } else {
+    std::cerr << "Failed to open team.txt" << std::endl;
+    // throw exception instead of exiting
+    exit(EXIT_FAILURE);
+  }
+
+  if (player_src.is_open() && (!(player_src.eof()))) {
+    update_player(C, player_src);
+    player_src.close();
+  } else {
+    std::cerr << "Failed to open player.txt" << std::endl;
+    // throw exception instead of exiting
+    exit(EXIT_FAILURE);
+  }
 }
 
 void update_state(pqxx::connection *C, std::istream &state_istream) {
@@ -130,6 +149,53 @@ void update_color(pqxx::connection *C, std::istream &color_istream) {
     // todo: add error checking
     // todo: check no. of columns extracted
     add_color(C, values[0]);
+  }
+}
+
+void update_team(pqxx::connection *C, std::istream &team_istream) {
+  std::string curr;
+  std::vector<std::string> values;
+
+  while (std::getline(team_istream, curr)) {
+    std::cout << curr << std::endl;
+    values = read_line(curr);
+    // todo: add error checking
+    // todo: check no. of columns extracted
+    try {
+      add_team(C, values[0], std::stoi(values[1], nullptr),
+               std::stoi(values[2], nullptr), std::stoi(values[3], nullptr),
+               std::stoi(values[4], nullptr));
+    } catch (std::exception &e) {
+      std::cerr << "update_team: " << e.what() << std::endl;
+      throw;
+    }
+  }
+}
+
+void update_player(pqxx::connection *C, std::istream &player_istream) {
+  std::string curr;
+  std::vector<std::string> values;
+
+  while (std::getline(player_istream, curr)) {
+    std::cout << curr << std::endl;
+    values = read_line(curr);
+    // todo: add error checking
+    // todo: check no. of columns extracted
+    try {
+      add_player(C, std::stoi(values[0], nullptr), // int team_id
+                 std::stoi(values[1], nullptr),    // int uniform_num
+                 values[2], values[3],             // first_name, last_name
+                 std::stoi(values[4], nullptr),
+                 std::stoi(values[5], nullptr), // mpg, ppg
+                 std::stoi(values[6], nullptr),
+                 std::stoi(values[6], nullptr), // rpg, apg
+                 std::stod(values[4], nullptr),
+                 std::stod(values[5], nullptr) // spg, bpg
+      );
+    } catch (std::exception &e) {
+      std::cerr << "update_player: " << e.what() << std::endl;
+      throw;
+    }
   }
 }
 
