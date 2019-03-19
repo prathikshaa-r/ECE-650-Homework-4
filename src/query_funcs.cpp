@@ -11,8 +11,8 @@ void add_player(pqxx::connection *C, int team_id, int jersey_num,
 
   try {
     r = w.exec(
-        "INSERT INTO PLAYER (TEAM_ID, UNIFORM_NUM, FIRST_NAME, LAST_NAME, "
-        "MPG, PPG, RPG, APG, SPG, BPG) VALUES (" +
+        "INSERT INTO Player (team_id, uniform_num, first_name, last_name, "
+        "mpg, ppg, rpg, apg, spg, bpg) VALUES (" +
         w.quote(team_id) + ", " + w.quote(jersey_num) + ", " +
         w.quote(first_name) + ", " + w.quote(last_name) + ", " + w.quote(mpg) +
         ", " + w.quote(ppg) + ", " + w.quote(rpg) + ", " + w.quote(apg) + ", " +
@@ -34,7 +34,7 @@ void add_team(pqxx::connection *C, std::string name, int state_id, int color_id,
 
   try {
     r = w.exec(
-        "INSERT INTO TEAM (NAME, STATE_ID, COLOR_ID, WINS, LOSSES) VALUES (" +
+        "INSERT INTO Team (name, state_id, color_id, wins, losses) VALUES (" +
         w.quote(name) + ", " + w.quote(state_id) + ", " + w.quote(color_id) +
         ", " + w.quote(wins) + ", " + w.quote(losses) + ");");
     w.commit();
@@ -51,7 +51,7 @@ void add_state(pqxx::connection *C, std::string name) {
   pqxx::result r;
 
   try {
-    r = w.exec("INSERT INTO STATE (NAME) VALUES (" + w.quote(name) + ");");
+    r = w.exec("INSERT INTO State (name) VALUES (" + w.quote(name) + ");");
     w.commit();
   } catch (std::exception &e) {
     w.abort();
@@ -66,7 +66,7 @@ void add_color(pqxx::connection *C, std::string name) {
   pqxx::result r;
 
   try {
-    r = w.exec("INSERT INTO COLOR (NAME) VALUES (" + w.quote(name) + ");");
+    r = w.exec("INSERT INTO Color (name) VALUES (" + w.quote(name) + ");");
     w.commit();
   } catch (std::exception &e) {
     w.abort();

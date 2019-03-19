@@ -21,60 +21,60 @@ pqxx::result execute_stmt(pqxx::connection *C, std::string sql,
 void drop_tables(pqxx::connection *C) {
   std::string drop = "DROP TABLE IF EXISTS ";
   // drop player
-  execute_stmt(C, drop + "PLAYER", "drop table player");
+  execute_stmt(C, drop + "Player", "drop table player");
 
   // drop team
-  execute_stmt(C, drop + "TEAM", "drop table team");
+  execute_stmt(C, drop + "Team", "drop table team");
 
   // drop state
-  execute_stmt(C, drop + "STATE", "drop table state");
+  execute_stmt(C, drop + "State", "drop table state");
 
   // drop color
-  execute_stmt(C, drop + "COLOR", "drop table color");
+  execute_stmt(C, drop + "Color", "drop table color");
 }
 
 void create_tables(pqxx::connection *C) {
   // create color
-  std::string create_color = "CREATE TABLE COLOR ("
-                             "COLOR_ID             SERIAL PRIMARY KEY,"
-                             "NAME                 TEXT    NOT NULL"
+  std::string create_color = "CREATE TABLE Color ("
+                             "color_id             SERIAL PRIMARY KEY,"
+                             "name                 TEXT    NOT NULL"
                              ");";
   execute_stmt(C, create_color, "create table color");
 
   // create state
-  std::string create_state = "CREATE TABLE STATE ("
-                             "STATE_ID             SERIAL PRIMARY KEY,"
-                             "NAME                 TEXT    NOT NULL"
+  std::string create_state = "CREATE TABLE State ("
+                             "state_id             SERIAL PRIMARY KEY,"
+                             "name                 TEXT    NOT NULL"
                              ");";
   execute_stmt(C, create_state, "create table state");
 
   // create team
-  std::string create_team = "CREATE TABLE TEAM ("
-                            "TEAM_ID             SERIAL PRIMARY KEY,"
-                            "NAME                TEXT    NOT NULL,"
-                            "STATE_ID            INT     NOT NULL,"
-                            "COLOR_ID            INT     NOT NULL,"
-                            "WINS                INT     NOT NULL,"
-                            "LOSSES              INT     NOT NULL,"
-                            "FOREIGN KEY(STATE_ID) REFERENCES STATE(STATE_ID),"
-                            "FOREIGN KEY(COLOR_ID) REFERENCES COLOR(COLOR_ID)"
+  std::string create_team = "CREATE TABLE Team ("
+                            "team_id             SERIAL PRIMARY KEY,"
+                            "name                TEXT    NOT NULL,"
+                            "state_id            INT     NOT NULL,"
+                            "color_id            INT     NOT NULL,"
+                            "wins                INT     NOT NULL,"
+                            "losses              INT     NOT NULL,"
+                            "FOREIGN KEY(state_id) REFERENCES State(state_id),"
+                            "FOREIGN KEY(color_id) REFERENCES Color(color_id)"
                             ");";
   execute_stmt(C, create_team, "create table team");
 
   // create player
-  std::string create_player = "CREATE TABLE PLAYER ("
-                              "PLAYER_ID             SERIAL PRIMARY KEY,"
-                              "TEAM_ID               INT     NOT NULL,"
-                              "UNIFORM_NUM           INT     NOT NULL,"
-                              "FIRST_NAME            TEXT    NOT NULL,"
-                              "LAST_NAME             TEXT    NOT NULL,"
-                              "MPG                   INT     NOT NULL,"
-                              "PPG                   INT     NOT NULL,"
-                              "RPG                   INT     NOT NULL,"
-                              "APG                   INT     NOT NULL,"
-                              "SPG                   REAL    NOT NULL,"
-                              "BPG                   REAL    NOT NULL,"
-                              "FOREIGN KEY(TEAM_ID) REFERENCES TEAM(TEAM_ID)"
+  std::string create_player = "CREATE TABLE Player ("
+                              "player_id             SERIAL PRIMARY KEY,"
+                              "team_id               INT     NOT NULL,"
+                              "uniform_num           INT     NOT NULL,"
+                              "first_name            TEXT    NOT NULL,"
+                              "last_name             TEXT    NOT NULL,"
+                              "mpg                   INT     NOT NULL,"
+                              "ppg                   INT     NOT NULL,"
+                              "rpg                   INT     NOT NULL,"
+                              "apg                   INT     NOT NULL,"
+                              "spg                   REAL    NOT NULL,"
+                              "bpg                   REAL    NOT NULL,"
+                              "FOREIGN KEY(team_id) REFERENCES Team(team_id)"
                               ");";
   execute_stmt(C, create_player, "create table player");
 }
