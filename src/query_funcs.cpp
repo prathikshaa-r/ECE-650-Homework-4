@@ -10,7 +10,20 @@ void add_player(pqxx::connection *C, int team_id, int jersey_num,
 void add_team(pqxx::connection *C, std::string name, int state_id, int color_id,
               int wins, int losses) {}
 
-void add_state(pqxx::connection *C, std::string name) {}
+void add_state(pqxx::connection *C, std::string name) {
+  pqxx::work w(*C);
+  pqxx::result r;
+
+  try {
+    r = w.exec("INSERT INTO STATE (NAME) VALUES (" + w.quote(name) + ");");
+    w.commit();
+  } catch (std::exception &e) {
+    w.abort();
+    std::cerr << "add_state: " << e.what() << std::endl;
+    throw;
+  }
+  std::cerr << "Added state  " + name << std::endl; // remove
+}
 
 void add_color(pqxx::connection *C, std::string name) {
   pqxx::work w(*C);
@@ -24,7 +37,7 @@ void add_color(pqxx::connection *C, std::string name) {
     std::cerr << "add_color: " << e.what() << std::endl;
     throw;
   }
-  std::cerr << "Added color " + name << std::endl;
+  std::cerr << "Added color " + name << std::endl; // remove
 }
 
 void query1(pqxx::connection *C, int use_mpg, int min_mpg, int max_mpg,

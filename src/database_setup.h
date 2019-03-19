@@ -13,6 +13,8 @@ void create_tables(pqxx::connection *C);
 void populate_tables_from_src_files(pqxx::connection *C);
 
 void update_color(pqxx::connection *C, std::istream &color_istream);
+void update_state(pqxx::connection *C, std::istream &state_istream);
+void update_team(pqxx::connection *C, std::istream &team_istream);
 
 std::vector<std::string> read_line(std::string curr);
 

@@ -94,6 +94,29 @@ void populate_tables_from_src_files(pqxx::connection *C) {
     // throw exception instead of exiting
     exit(EXIT_FAILURE);
   }
+
+  if (state_src.is_open() && (!(state_src.eof()))) {
+    update_state(C, state_src);
+    state_src.close();
+  } else {
+    std::cerr << "Failed to open state.txt" << std::endl;
+    // throw exception instead of exiting
+    exit(EXIT_FAILURE);
+  }
+}
+
+void update_state(pqxx::connection *C, std::istream &state_istream) {
+  std::string curr;
+
+  std::vector<std::string> values;
+
+  while (std::getline(state_istream, curr)) {
+    std::cout << curr << std::endl;
+    values = read_line(curr);
+    // todo: add error checking
+    // todo: check no. of columns extracted
+    add_state(C, values[0]);
+  }
 }
 
 void update_color(pqxx::connection *C, std::istream &color_istream) {
