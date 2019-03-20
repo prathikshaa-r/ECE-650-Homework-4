@@ -49,33 +49,35 @@ void create_tables(pqxx::connection *C) {
   execute_stmt(C, create_state, "create table state");
 
   // create team
-  std::string create_team = "CREATE TABLE Team ("
-                            "team_id             SERIAL PRIMARY KEY,"
-                            "name                TEXT    NOT NULL,"
-                            "state_id            INT     NOT NULL,"
-                            "color_id            INT     NOT NULL,"
-                            "wins                INT     NOT NULL,"
-                            "losses              INT     NOT NULL,"
-                            "FOREIGN KEY(state_id) REFERENCES State(state_id),"
-                            "FOREIGN KEY(color_id) REFERENCES Color(color_id)"
-                            ");";
+  std::string create_team =
+      "CREATE TABLE Team ("
+      "team_id             SERIAL PRIMARY KEY,"
+      "name                TEXT    NOT NULL,"
+      "state_id            INT     NOT NULL,"
+      "color_id            INT     NOT NULL,"
+      "wins                INT     NOT NULL,"
+      "losses              INT     NOT NULL,"
+      "FOREIGN KEY(state_id) REFERENCES State(state_id) ON DELETE CASCADE,"
+      "FOREIGN KEY(color_id) REFERENCES Color(color_id) ON DELETE CASCADE"
+      ");";
   execute_stmt(C, create_team, "create table team");
 
   // create player
-  std::string create_player = "CREATE TABLE Player ("
-                              "player_id             SERIAL PRIMARY KEY,"
-                              "team_id               INT     NOT NULL,"
-                              "uniform_num           INT     NOT NULL,"
-                              "first_name            TEXT    NOT NULL,"
-                              "last_name             TEXT    NOT NULL,"
-                              "mpg                   INT     NOT NULL,"
-                              "ppg                   INT     NOT NULL,"
-                              "rpg                   INT     NOT NULL,"
-                              "apg                   INT     NOT NULL,"
-                              "spg                   REAL    NOT NULL,"
-                              "bpg                   REAL    NOT NULL,"
-                              "FOREIGN KEY(team_id) REFERENCES Team(team_id)"
-                              ");";
+  std::string create_player =
+      "CREATE TABLE Player ("
+      "player_id             SERIAL PRIMARY KEY,"
+      "team_id               INT     NOT NULL,"
+      "uniform_num           INT     NOT NULL,"
+      "first_name            TEXT    NOT NULL,"
+      "last_name             TEXT    NOT NULL,"
+      "mpg                   INT     NOT NULL,"
+      "ppg                   INT     NOT NULL,"
+      "rpg                   INT     NOT NULL,"
+      "apg                   INT     NOT NULL,"
+      "spg                   REAL    NOT NULL,"
+      "bpg                   REAL    NOT NULL,"
+      "FOREIGN KEY(team_id) REFERENCES Team(team_id) ON DELETE CASCADE"
+      ");";
   execute_stmt(C, create_player, "create table player");
 }
 
