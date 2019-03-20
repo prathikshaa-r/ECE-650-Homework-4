@@ -143,7 +143,7 @@ void query1(pqxx::connection *C, int use_mpg, int min_mpg, int max_mpg,
   }
   if (not_first_cond) {
     std::cout << "not_first_cond true: " << not_first_cond << std::endl;
-    //    sql += cond;
+    sql += cond;
   }
   sql += ";";
   try {

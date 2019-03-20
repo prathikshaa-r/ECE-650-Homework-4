@@ -23,4 +23,5 @@ void exercise(pqxx::connection *C) {
 
   std::cout << std::endl;
   query1(C, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  query1(C, 1, 20, 30, 1, 15, 20, 1, 0, 10, 1, 0, 10, 1, 0, 2.0, 1, 0, 1.5);
 }
