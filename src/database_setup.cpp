@@ -14,7 +14,7 @@ pqxx::result execute_stmt(pqxx::connection *C, std::string sql,
     std::cerr << "Error: " << desc << ": " << e.what() << std::endl;
     throw;
   }
-  std::cerr << "Success: " << desc << std::endl;
+  //  std::cerr << "Success: " << desc << std::endl;
   return r;
 }
 

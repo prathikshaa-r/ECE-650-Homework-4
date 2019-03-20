@@ -16,4 +16,8 @@ void exercise(pqxx::connection *C) {
   query4(C, "NC", "LightBlue");
   query4(C, "NC", "DarkBlue");
   query4(C, "NC", "Red");
+  query5(C, 0);
+  query5(C, 5);
+  query5(C, 10);
+  query5(C, 15);
 }
