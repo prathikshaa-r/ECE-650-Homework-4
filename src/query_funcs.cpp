@@ -10,6 +10,13 @@ void add_player(pqxx::connection *C, int team_id, int jersey_num,
   pqxx::work w(*C);
   pqxx::result r;
 
+  // std::cout << "team_id:\t" << team_id << "\njersey_num:\t" << jersey_num
+  //           << "\nfirst_name:\t" << first_name << "\nlast_name:\t" <<
+  //           last_name
+  //           << "\nmpg:\t" << mpg << "\nppg:\t" << ppg << "\nrpg:\t" << rpg
+  //           << "\napg:\t" << apg << "\nspg:\t" << spg << "\nbpg:\t" << bpg
+  //           << std::endl;
+
   try {
     r = w.exec(
         "INSERT INTO Player (team_id, uniform_num, first_name, last_name, "
@@ -81,7 +88,89 @@ void query1(pqxx::connection *C, int use_mpg, int min_mpg, int max_mpg,
             int use_ppg, int min_ppg, int max_ppg, int use_rpg, int min_rpg,
             int max_rpg, int use_apg, int min_apg, int max_apg, int use_spg,
             double min_spg, double max_spg, int use_bpg, double min_bpg,
-            double max_bpg) {}
+            double max_bpg) {
+  std::cout << std::left << std::setw(10) << "PLAYER_ID" << std::left
+            << std::setw(10) << "TEAM_ID" << std::left << std::setw(15)
+            << "UNIFORM_NUM" << std::left << std::setw(20) << "FIRST_NAME"
+            << std::left << std::setw(20) << "LAST_NAME" << std::left
+            << std::setw(5) << "MPG" << std::left << std::setw(5) << "PPG"
+            << std::left << std::setw(5) << "RPG" << std::left << std::setw(5)
+            << "APG" << std::left << std::setw(5) << "SPG" << std::left
+            << std::setw(5) << "BPG" << std::endl;
+
+  pqxx::nontransaction n(*C);
+  size_t not_first_cond = 0;
+  std::string sql = "SELECT * FROM Player";
+  std::string cond = " WHERE ";
+  if (use_mpg) {
+    cond += "mpg>=" + n.quote(min_mpg) + " AND mpg<=" + n.quote(max_mpg);
+    not_first_cond++;
+  }
+  if (use_ppg) {
+    if (not_first_cond) {
+      cond += " AND ";
+    }
+    cond += "ppg>=" + n.quote(min_ppg) + " AND ppg<=" + n.quote(max_ppg);
+    not_first_cond++;
+  }
+  if (use_rpg) {
+    if (not_first_cond) {
+      cond += " AND ";
+    }
+    cond += "rpg>=" + n.quote(min_rpg) + " AND rpg<=" + n.quote(max_rpg);
+    not_first_cond++;
+  }
+  if (use_apg) {
+    if (not_first_cond) {
+      cond += " AND ";
+    }
+    cond += "apg>=" + n.quote(min_apg) + " AND apg<=" + n.quote(max_apg);
+    not_first_cond++;
+  }
+  if (use_spg) {
+    if (not_first_cond) {
+      cond += " AND ";
+    }
+    cond += "spg>=" + n.quote(min_spg) + " AND spg<=" + n.quote(max_spg);
+    not_first_cond++;
+  }
+  if (use_bpg) {
+    if (not_first_cond) {
+      cond += " AND ";
+    }
+    cond += "bpg>=" + n.quote(min_bpg) + " AND bpg<=" + n.quote(max_bpg);
+    not_first_cond++;
+  }
+  if (not_first_cond) {
+    std::cout << "not_first_cond true: " << not_first_cond << std::endl;
+    //    sql += cond;
+  }
+  sql += ";";
+  try {
+    pqxx::result r(n.exec(sql));
+
+    for (pqxx::result::const_iterator iter = r.begin(); iter != r.end();
+         iter++) {
+      std::cout << std::left << std::setw(10) << iter[0].as<int>() // player_id
+                << std::left << std::setw(10) << iter[1].as<int>() // team_id
+                << std::left << std::setw(15) << iter[2].as<int>() // jersey_num
+                << std::left << std::setw(20)
+                << iter[3].as<std::string>() // first_name
+                << std::left << std::setw(20)
+                << iter[4].as<std::string>()                      // last_name
+                << std::left << std::setw(5) << iter[5].as<int>() // mpg
+                << std::left << std::setw(5) << iter[6].as<int>() // ppg
+                << std::left << std::setw(5) << iter[7].as<int>() // rpg
+                << std::left << std::setw(5) << iter[8].as<int>() // apg
+                << std::left << std::setw(5) << iter[9].as<double>()  // spg
+                << std::left << std::setw(5) << iter[10].as<double>() // bpg
+                << std::endl;
+    }
+  } catch (std::exception &e) {
+    std::cerr << "query5: " << e.what() << std::endl;
+    throw;
+  }
+}
 
 void query2(pqxx::connection *C, std::string team_color) {
   std::cout << std::left << std::setw(20) << "NAME" << std::endl;

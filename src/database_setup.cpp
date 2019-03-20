@@ -188,9 +188,9 @@ void update_player(pqxx::connection *C, std::istream &player_istream) {
                  std::stoi(values[4], nullptr),
                  std::stoi(values[5], nullptr), // mpg, ppg
                  std::stoi(values[6], nullptr),
-                 std::stoi(values[6], nullptr), // rpg, apg
-                 std::stod(values[4], nullptr),
-                 std::stod(values[5], nullptr) // spg, bpg
+                 std::stoi(values[7], nullptr), // rpg, apg
+                 std::stod(values[8], nullptr),
+                 std::stod(values[9], nullptr) // spg, bpg
       );
     } catch (std::exception &e) {
       std::cerr << "update_player: " << e.what() << std::endl;

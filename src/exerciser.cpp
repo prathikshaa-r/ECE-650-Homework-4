@@ -20,4 +20,7 @@ void exercise(pqxx::connection *C) {
   query5(C, 5);
   query5(C, 10);
   query5(C, 15);
+
+  std::cout << std::endl;
+  query1(C, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 }
